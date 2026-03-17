@@ -73,7 +73,7 @@ Route::middleware('auth')->group(function () {
     |----------------------------------------------------------------------
     */
     Route::get('/prediksi', [PrediksiController::class, 'index'])->name('prediksi.index');
-    Route::post('/prediksi/run', [PrediksiController::class, 'predict'])->name('prediksi.run');
+    Route::post('/prediksi/predict', [PrediksiController::class, 'predict'])->name('prediksi.predict');
     Route::post('/prediksi/save', [PrediksiController::class, 'save'])->name('prediksi.save');
     Route::post('/prediksi/clear', [PrediksiController::class, 'clear'])->name('prediksi.clear');
     Route::get('/prediksi/hasil', [PrediksiController::class, 'hasil'])->name('hasil.index');

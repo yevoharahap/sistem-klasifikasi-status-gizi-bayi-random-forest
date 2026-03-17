@@ -62,6 +62,8 @@ def train():
             by=["jenis_kelamin", "usia_bulan", "berat_badan", "tinggi_badan", "imt"]
         ).reset_index(drop=True)
 
+        df_original = df.copy()   # SIMPAN DATA ASLI
+
         df = df.reset_index(drop=True)
 
         # =========================
@@ -207,10 +209,10 @@ def train():
         # =========================
         result_df = X_test.copy()
         result_df["jenis_kelamin"] = result_df["jenis_kelamin_enc"].map(gender_rev_map)
-        result_df["usia_bulan"] = X_test["usia_bulan"].astype(int)
-        result_df["berat_badan"] = X_test["berat_badan"]
-        result_df["tinggi_badan"] = X_test["tinggi_badan"]
-        result_df["imt"] = X_test["imt"]
+        result_df["usia_bulan"] = df_original.loc[X_test.index, "usia_bulan"]
+        result_df["berat_badan"] = df_original.loc[X_test.index, "berat_badan"]
+        result_df["tinggi_badan"] = df_original.loc[X_test.index, "tinggi_badan"]
+        result_df["imt"] = df_original.loc[X_test.index, "imt"]
         result_df["status_gizi_aktual"] = le_status.inverse_transform(y_test)
         result_df["prediksi"] = le_status.inverse_transform(y_pred)
 
@@ -242,10 +244,10 @@ def train():
             },
             "model_base64": model_base64  # <-- Laravel akan simpan ini ke file & DB
         })
-    
+
     except Exception as e:
         return jsonify({"error": str(e)}), 400
-    
+
 
 # ======================================================
 #               TREE ANALYSIS API (FINAL)
@@ -391,64 +393,64 @@ def tree_analysis():
 # ======================================================
 #                   PREDICT API (FIXED)
 # ======================================================
-
 @app.route("/predict", methods=["POST"])
 def predict():
     try:
-        start_time = time.time()   # MULAI TIMER
+        start_time = time.time()
 
         data = request.get_json()
         model_base64 = data.get("model_base64")
+        dataset = data.get("data", [])
 
         if not model_base64:
             return jsonify({"error": "Model tidak diterima"}), 400
 
-        # Load model + scaler + label encoder
         model_bytes = BytesIO(base64.b64decode(model_base64))
         obj = pickle.load(model_bytes)
 
         model = obj["model"]
         le_status = obj["le_status"]
-        scaler = obj.get("scaler")  # <-- pastikan saat training disimpan
+        scaler = obj.get("scaler")
 
-        # Siapkan input
-        X = np.array([[  
-            gender_map[data["jenis_kelamin"]],  
-            float(data["usia_bulan"]),
-            float(data["berat_badan"]),  
-            float(data["tinggi_badan"]),  
-            float(data["imt"])  
-        ]])
+        results = []
 
-        # Normalisasi numerik sama seperti training
-        # gender_map tidak di-scale, jadi kita scale kolom numerik saja (usia, berat, tinggi, IMT)
-        if scaler:
-            X[:, 1:] = scaler.transform(X[:, 1:])
+        for row in dataset:
 
-        # Prediksi
-        pred = model.predict(X)[0]
-        label = le_status.inverse_transform([pred])[0]
+            X = np.array([[
+                gender_map[row["jenis_kelamin"]],
+                float(row["usia_bulan"]),
+                float(row["berat_badan"]),
+                float(row["tinggi_badan"]),
+                float(row["imt"])
+            ]])
 
-        # Probabilitas
-        proba = model.predict_proba(X)[0]
-        proba_dict = {
-            le_status.classes_[i]: round(float(proba[i]) * 100, 2)
-            for i in range(len(proba))
-        }
+            if scaler:
+                X[:,1:] = scaler.transform(X[:,1:])
 
-        end_time = time.time()  # SELESAI TIMER
+            pred = model.predict(X)[0]
+            label = le_status.inverse_transform([pred])[0]
+
+            proba = model.predict_proba(X)[0]
+
+            proba_dict = {
+                le_status.classes_[i]: round(float(proba[i])*100,2)
+                for i in range(len(proba))
+            }
+
+            results.append({
+                "prediction": label,
+                "probability": proba_dict
+            })
+
+        end_time = time.time()
 
         return jsonify({
-            "hasil_prediksi": label,
-            "probabilitas": proba_dict,
-            "prediction": label,
-            "probability": proba_dict,
-            "execution_time": round(end_time - start_time, 4)
+            "predictions": results,
+            "execution_time": round(end_time - start_time,4)
         })
 
     except Exception as e:
         return jsonify({"error": str(e)}), 400
-
 
 # ======================================================
 #                     RUN SERVER

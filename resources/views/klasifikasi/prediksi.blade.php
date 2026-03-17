@@ -30,7 +30,7 @@
         <div class="card-body pt-0">
 
             {{-- ================= FORM PREDIKSI ================= --}}
-            <form action="{{ route('prediksi.run') }}" method="POST">
+            <form action="{{ route('prediksi.predict') }}" method="POST">
                 @csrf
 
                 {{-- ===== NAMA PREDIKSI ===== --}}
@@ -334,8 +334,8 @@
         </div>
         @endif
     </div>
-</div> 
-       
+</div>
+
         @push('scripts')
         <script>
         function calculateIMT(row) {
