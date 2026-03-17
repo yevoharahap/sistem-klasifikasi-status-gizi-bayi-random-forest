@@ -1,59 +1,184 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+## 🧒 Baby Nutritional Status Classification System (Laravel + Flask)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A web-based system for classifying the nutritional status of infants using Machine Learning with the Random Forest algorithm.
+This system integrates a Laravel web application with a Python Flask API to perform machine learning classification based on infant growth and nutritional data.
+The application helps healthcare workers, researchers, or parents analyze infant nutritional conditions and classify them into appropriate nutritional status categories.
 
-## About Laravel
+## 🧠 System Architecture
+This project uses a microservice architecture where the web application and machine learning service run separately :
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+User → Laravel Web App → HTTP Request → Flask API → Random Forest Model → Classification Result → Laravel → User
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+**Explanation**
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+**Laravel handles:**
+- user authentication
+- data input and management
+- dataset visualization
+- sending data to the ML API
+- displaying classification results
 
-## Learning Laravel
+**Flask handles:**
+- data preprocessing
+- model training
+- Random Forest classification
+- model evaluation
+- prediction results
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+Laravel communicates with Flask via HTTP API (JSON Response).
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 🚀 Main Features
 
-## Laravel Sponsors
+**Dataset Management**
+- Input infant nutritional data
+- Edit and delete dataset
+- Store dataset in MySQL database
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+**Machine Learning Processing**
+- Data preprocessing
+- Feature selection
+- Dataset splitting (train/test)
+- Random Forest model training
+- Automatic classification process
 
-### Premium Partners
+**Classification**
+The system classifies infant nutritional status such as:
+- Normal Nutrition
+- Under Nutrition
+- Over Nutrition
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+based on features like:
+- age
+- weight
+- height
+- other nutritional indicators
 
-## Contributing
+**Model Evaluation**
+- Accuracy Score
+- Confusion Matrix
+- Classification Report
+- Performance metrics visualization
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+**Visualization**
+- Interactive charts
+- Dataset distribution
+- Model performance visualization
 
-## Code of Conduct
+## 🧱 Technologies Used
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+| Component | Technology |
+|--------|--------|
+| Web Framework | Laravel 12 (PHP) |
+| Machine Learning API | Python Flask |
+| Database | MySQL |
+| Visualization | Chart.js  / JavaScript |
+| Styling | Bootstrap / Tailwind |
+| ML Library | scikit-learn |
+| Communication | REST API (JSON HTTP) |
+| Runtime Environment | PHP 8+, Python 3.10+ |
 
-## Security Vulnerabilities
+## 📁 Project Structure
+```text
+project-root/
+│
+├── app/                    # Laravel Controllers & Business Logic
+├── routes/                 # Web Routes
+├── resources/
+│   └── views/              # Blade Templates (UI Pages)
+├── database/               # Migrations & Seeders
+├── public/                 # CSS, JS, Images, Assets
+│
+├── python/                 # Flask Machine Learning Service
+│   ├── api.py              # Random Forest API Endpoint
+│   └── requirements.txt    # Python Dependencies
+│
+└── .env.example            # Environment Configuration Template
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## ⚙️ How to Run This Project
+```text
+# ==========================================
+# Baby Nutritional Status Classification
+# Laravel + Flask Setup Guide
+# ==========================================
 
-## License
+# 1. Clone repository
+git clone https://github.com/yevoharahap/sistem-klasifikasi-status-gizi-bayi-random-forest.git
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+cd sistem-klasifikasi-status-gizi-bayi-random-forest
+
+
+# ================================
+# 2. LARAVEL SETUP (WEB SYSTEM)
+# ================================
+
+# install PHP dependencies
+composer install
+
+# create environment file
+cp .env.example .env
+
+# generate application key
+php artisan key:generate
+
+# IMPORTANT:
+# create a MySQL database first (example: gizi_bayi)
+
+# then edit .env and configure:
+DB_DATABASE=gizi_bayi
+DB_USERNAME=root
+DB_PASSWORD=
+
+# migrate database
+php artisan migrate
+
+# install frontend dependencies
+npm install
+
+# build frontend assets
+npm run build
+
+# run laravel server
+php artisan serve
+
+
+# ================================
+# 3. PYTHON FLASK SETUP (ML API)
+# ================================
+
+# open new terminal
+cd python
+
+# create virtual environment
+python -m venv venv
+
+# activate venv (Windows)
+venv\Scripts\activate
+
+# Linux / Mac alternative
+# source venv/bin/activate
+
+# install python libraries
+pip install -r requirements.txt
+
+# run Flask API
+python api.py
+
+
+# ================================
+# ACCESS APPLICATION
+# ================================
+
+# Laravel Web Application
+http://127.0.0.1:8000
+
+# Flask Machine Learning API
+http://127.0.0.1:5000
+
+
+# IMPORTANT
+Both servers must be running simultaneously.
+
+If the classification feature does not work,
+make sure the Flask API server is active.
+```
