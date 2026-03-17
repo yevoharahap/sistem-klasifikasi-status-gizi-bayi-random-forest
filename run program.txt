@@ -1,0 +1,5 @@
+.\.venv\Scripts\Activate.ps1
+cd python
+py api.py
+
+php artisan serve
