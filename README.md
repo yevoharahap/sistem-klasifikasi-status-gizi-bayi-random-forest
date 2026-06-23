@@ -1,10 +1,10 @@
-# 🌴 Palm Oil Variety Classification System (Laravel + Flask + KNN)
+# 🧒 Baby Nutritional Status Classification System (Laravel + Flask)
 
-A web-based machine learning system for classifying oil palm varieties into **Recommended (R)** and **Not Recommended (TD)** categories using the **K-Nearest Neighbors (KNN)** algorithm.
+A web-based system for classifying the nutritional status of infants using Machine Learning with the Random Forest algorithm.
 
-This system integrates a **Laravel web application** with a **Python Flask API** to perform machine learning processes including data preprocessing, model training, evaluation, and classification of new oil palm plantation data.
+This system integrates a Laravel web application with a Python Flask API to perform machine learning classification based on infant growth and nutritional data.
 
-The application is designed to assist plantation managers, researchers, and agricultural practitioners in identifying oil palm varieties that have the potential to provide better production performance based on production and plantation waste indicators.
+The application helps healthcare workers, researchers, or parents analyze infant nutritional conditions and classify them into appropriate nutritional status categories.
 
 ---
 
@@ -14,315 +14,206 @@ This project uses a microservice architecture where the web application and mach
 
 ```text
 User
-   ↓
-Laravel Web Application
-   ↓
-HTTP Request (JSON)
-   ↓
+    ↓
+Laravel Web App
+    ↓
+HTTP Request
+    ↓
 Flask API
-   ↓
-K-Nearest Neighbors (KNN) Model
-   ↓
+    ↓
+Random Forest Model
+    ↓
 Classification Result
-   ↓
-Laravel Web Application
-   ↓
+    ↓
+Laravel
+    ↓
 User
 ```
 
+## Explanation
+
 ### Laravel Handles
 
-* User interface (UI)
-* Dataset management
-* Model management
-* Training configuration
-* Classification requests
-* Result visualization
-* Report generation
-* Data storage
+* User authentication
+* Data input and management
+* Dataset visualization
+* Sending data to the ML API
+* Displaying classification results
 
 ### Flask Handles
 
 * Data preprocessing
-* Feature normalization (MinMaxScaler)
-* Label encoding
-* KNN model training
-* Classification process
-* Probability calculation
-* Model serialization
-* Performance evaluation
+* Model training
+* Random Forest classification
+* Model evaluation
+* Prediction results
 
-Laravel communicates with Flask using REST API and JSON responses.
+Laravel communicates with Flask via HTTP API using JSON responses.
 
 ---
 
 # 🚀 Main Features
 
-## 📊 Dataset Management
+## Dataset Management
 
-* Add oil palm dataset manually
-* Import dataset from Excel (.xlsx/.xls)
-* Edit dataset
-* Delete dataset
+* Input infant nutritional data
+* Edit and delete dataset
 * Store dataset in MySQL database
 
-Dataset attributes include:
+## Machine Learning Processing
 
-* Produksi TBS
-* Rendemen CPO
-* Produksi Kernel
-* Limbah Tandan Kosong
-* Limbah Cangkang
-* Limbah Serat
-* Varietas
-* Label
+* Data preprocessing
+* Feature selection
+* Dataset splitting (train/test)
+* Random Forest model training
+* Automatic classification process
 
----
+## Classification
 
-## 🤖 Machine Learning Training
+The system classifies infant nutritional status into categories such as:
 
-The system provides a complete machine learning training workflow:
+* Normal Nutrition
+* Under Nutrition
+* Over Nutrition
 
-### Data Preprocessing
+Based on features including:
 
-* Data validation
-* Missing value handling
-* Numeric conversion
-* Min-Max Normalization
+* Age
+* Weight
+* Height
+* Other nutritional indicators
 
-### Dataset Splitting
-
-* Custom Train-Test Split
-* 50% – 95% training ratio support
-
-### KNN Training
-
-* Adjustable K value
-* Automatic model training
-* Model performance calculation
-
-### Model Storage
-
-* Save trained models
-* Reuse trained models for future classifications
-
----
-
-## 🌴 Oil Palm Variety Classification
-
-The system classifies oil palm varieties into:
-
-### R (Recommended)
-
-Varieties that meet production and plantation waste criteria and are considered suitable for recommendation.
-
-### TD (Not Recommended)
-
-Varieties that do not meet recommendation criteria based on trained model patterns.
-
-Classification can be performed using:
-
-### Manual Input
-
-Users can directly enter plantation data through the application.
-
-### Excel / CSV Upload
-
-Users can upload multiple records for batch classification.
-
----
-
-## 📈 Model Evaluation
-
-The system automatically evaluates model performance using:
+## Model Evaluation
 
 * Accuracy Score
-* Precision
-* Recall
-* F1-Score
 * Confusion Matrix
 * Classification Report
+* Performance metrics visualization
 
-Performance metrics help users determine model reliability before deployment.
+## Visualization
 
----
-
-## 📋 Classification Result Management
-
-* Display prediction results
-* Display classification probabilities
-* Save classification history
-* Generate PDF reports
-* View previous classification records
-
----
-
-## 📑 PDF Reporting
-
-The system can generate classification reports containing:
-
-* Classification information
-* Model information
-* Input dataset
-* Prediction results
-* Recommendation statistics
-* Classification probabilities
-
-Reports can be downloaded and printed directly.
+* Interactive charts
+* Dataset distribution
+* Model performance visualization
 
 ---
 
 # 🧱 Technologies Used
 
-| Component                  | Technology                |
-| -------------------------- | ------------------------- |
-| Web Framework              | Laravel 12                |
-| Machine Learning API       | Python Flask              |
-| Machine Learning Algorithm | K-Nearest Neighbors (KNN) |
-| Data Processing            | Pandas                    |
-| Machine Learning Library   | Scikit-Learn              |
-| Database                   | MySQL                     |
-| Frontend                   | Blade Template            |
-| Styling                    | Bootstrap 5               |
-| Visualization              | Chart.js                  |
-| API Communication          | REST API (JSON)           |
-| Runtime Environment        | PHP 8+, Python 3.10+      |
+| Component            | Technology            |
+| -------------------- | --------------------- |
+| Web Framework        | Laravel 12 (PHP)      |
+| Machine Learning API | Python Flask          |
+| Database             | MySQL                 |
+| Visualization        | Chart.js / JavaScript |
+| Styling              | Bootstrap / Tailwind  |
+| ML Library           | Scikit-learn          |
+| Communication        | REST API (JSON HTTP)  |
+| Runtime Environment  | PHP 8+, Python 3.10+  |
 
 ---
 
 # 📁 Project Structure
 
 ```text
-classification_knn/
+project-root/
 │
-├── app/
-│   ├── Http/
-│   │   └── Controllers/
-│   └── Models/
-│
-├── routes/
-│   └── web.php
-│
+├── app/                    # Laravel Controllers & Business Logic
+├── routes/                 # Web Routes
 ├── resources/
-│   └── views/
+│   └── views/              # Blade Templates (UI Pages)
+├── database/               # Migrations & Seeders
+├── public/                 # CSS, JS, Images, Assets
 │
-├── database/
-│   ├── migrations/
-│   └── seeders/
+├── python/                 # Flask Machine Learning Service
+│   ├── api.py              # Random Forest API Endpoint
+│   └── requirements.txt    # Python Dependencies
 │
-├── public/
-│
-├── storage/
-│   └── app/public/model/
-│
-├── python/
-│   ├── api_knn.py
-│   └── requirements.txt
-│
-├── .env.example
-│
-└── README.md
+└── .env.example            # Environment Configuration Template
 ```
 
 ---
 
 # ⚙️ How to Run This Project
 
-```text
+```bash
 # ==========================================
-# Palm Oil Variety Classification System
+# Baby Nutritional Status Classification
 # Laravel + Flask Setup Guide
 # ==========================================
 
-# 1. Clone Repository
-git clone https://github.com/yevoharahap/sistem-klasifikasi-varietas-kelapa-sawit.git
+# 1. Clone repository
+git clone https://github.com/yevoharahap/sistem-klasifikasi-status-gizi-bayi-random-forest.git
 
-cd sistem-klasifikasi-varietas-kelapa-sawit
+cd sistem-klasifikasi-status-gizi-bayi-random-forest
 
 
-# ==========================================
-# 2. LARAVEL SETUP
-# ==========================================
+# ================================
+# 2. LARAVEL SETUP (WEB SYSTEM)
+# ================================
 
-# Install PHP Dependencies
+# Install PHP dependencies
 composer install
 
-# Create Environment File
-copy .env.example .env
+# Create environment file
+cp .env.example .env
 
-# Generate Application Key
+# Generate application key
 php artisan key:generate
 
-
-# Create MySQL Database
-# Example:
-# database name = klasifikasi_sawit
-
+# IMPORTANT:
+# Create a MySQL database first
+# Example: gizi_bayi
 
 # Configure .env
-
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=klasifikasi_sawit
+DB_DATABASE=gizi_bayi
 DB_USERNAME=root
 DB_PASSWORD=
 
-
-# Run Migration
+# Run migration
 php artisan migrate
 
-
-# Create Storage Link
-php artisan storage:link
-
-
-# Install Frontend Dependencies
+# Install frontend dependencies
 npm install
 
-
-# Build Assets
+# Build frontend assets
 npm run build
 
-
-# Run Laravel Server
+# Run Laravel server
 php artisan serve
 
 
-# ==========================================
-# 3. PYTHON FLASK SETUP
-# ==========================================
+# ================================
+# 3. PYTHON FLASK SETUP (ML API)
+# ================================
 
-# Open New Terminal
-
+# Open new terminal
 cd python
 
-# Create Virtual Environment
+# Create virtual environment
 python -m venv venv
 
-# Activate Virtual Environment (Windows)
+# Activate virtual environment (Windows)
 venv\Scripts\activate
 
-# Linux / Mac
+# Linux / Mac alternative
 # source venv/bin/activate
 
-
-# Install Python Dependencies
+# Install Python libraries
 pip install -r requirements.txt
 
-
 # Run Flask API
-python api_knn.py
+python api.py
 
 
-# ==========================================
+# ================================
 # ACCESS APPLICATION
-# ==========================================
+# ================================
 
-Laravel Application
+# Laravel Web Application
 http://127.0.0.1:8000
 
-Flask API
+# Flask Machine Learning API
 http://127.0.0.1:5000
 ```
 
@@ -330,43 +221,6 @@ http://127.0.0.1:5000
 
 # ⚠️ Important Notes
 
-1. Laravel Server and Flask API must run simultaneously.
-2. Classification features will not work if Flask API is not running.
-3. Trained models are stored in the storage directory and must not be deleted.
-4. Uploaded datasets must follow the required column format.
-5. Ensure Python dependencies are installed before running Flask.
-
----
-
-# 📄 Required Dataset Format
-
-Dataset files (.xlsx, .xls, .csv) must contain the following columns:
-
-```text
-produksi_tbs
-rendeman_cpo
-produksi_kernel
-limbah_tandan_kosong
-limbah_cangkang
-limbah_serat
-varietas
-label
-```
-
-Example:
-
-| produksi_tbs | rendeman_cpo | produksi_kernel | limbah_tandan_kosong | limbah_cangkang | limbah_serat | varietas       | label |
-| ------------ | ------------ | --------------- | -------------------- | --------------- | ------------ | -------------- | ----- |
-| 24.5         | 22.3         | 5.1             | 5.6                  | 1.2             | 2.5          | DxP Simalungun | R     |
-| 18.7         | 19.5         | 3.8             | 4.8                  | 0.9             | 1.8          | Marihat        | TD    |
-
----
-
-# 👨‍💻 Developer
-
-**Yevo Harahap**
-
-Final Project:
-**Classification of Oil Palm Varieties Using K-Nearest Neighbors (KNN) Method with Weight Voting**
-
-PT. Seumadam, Aceh Tamiang, Aceh
+* Both Laravel and Flask servers must be running simultaneously.
+* If the classification feature does not work, make sure the Flask API server is active.
+* Ensure all required dependencies have been installed successfully before running the application.
